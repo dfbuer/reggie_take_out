@@ -1,0 +1,29 @@
+http://start.spring.io
+http://start.aliyun.com
+
+springBoot整合第三方技术步骤：
+1.导入对应的坐标
+2.在.yml文件中写配置文件
+
+mybatis-plus分页：
+1.IPage iPage = new Page(1,5);
+  bookDao.selectPage(iPage,null);
+2.创建一个MP的配置类，加上配置类的注解，创建拦截器
+    @Bean
+        public MybatisPlusInterceptor mybatisPlusInterceptor(){
+            MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+            interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+            return interceptor;
+        }
+3.这个配置类必须在引导类所在的包或者子包下
+
+实体类(domain):写对象，数据库每一条数据就是一个对象
+数据层(dao):主要写方法，用来从数据库中查询数据的
+业务层(service):主要写方法，用来获取从数据库中查询到的信息,记得在实现类中申明为bean，接口中不用再次申明
+表现出(controller):1.写方法，调用业务层的方法获取业务层得到的数据
+                  2.R类，前后端交互协议，同意后端传回前端的数据格式和请求状态
+
+4.操作两张表时，记得加@Transactional事务注解，确保两张表的数据一致
+
+
+

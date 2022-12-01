@@ -222,6 +222,10 @@
     2.获取连接Jedis jedis = new Jedis("localhost",6379);
     3.执行操作jedis.set("name","zukedegou");
     4.关闭连接jedis.close();
+10.环境搭建：
+    1.maven坐标
+    2.配置yml文件
+    3.导入配置类
 
 
 

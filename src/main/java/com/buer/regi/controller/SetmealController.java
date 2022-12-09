@@ -12,12 +12,17 @@ import com.buer.regi.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
+@EnableCaching //开启注解缓存功能
 @RequestMapping("/setmeal")
 public class SetmealController {
 
@@ -36,6 +41,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping
+    @CacheEvict(value = "setmealCache",allEntries = true) //删除这个分类下的所有缓存数据
     public R<String> save(@RequestBody SetmealDto setmealDto){
         //先看看是否成功封装数据
         log.info("setmealDto = {}",setmealDto);
@@ -94,6 +100,7 @@ public class SetmealController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(value = "setmealCache",allEntries = true) //删除这个分类下的所有缓存数据
     public R<String> delete(@RequestParam List<Long> ids){
         log.info("ids = {}",ids);
 
@@ -109,6 +116,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/list")
+    @Cacheable(value = "setmealCache",key = "#setmeal.categoryId+ '_' + #setmeal.status")
     public R<List<Setmeal>> list(Setmeal setmeal){
 
         Long categoryId = setmeal.getCategoryId();
